@@ -1,0 +1,84 @@
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+
+interface Question {
+  x: number;
+  y: number;
+}
+
+export default function NumberComparison() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const start = parseInt(searchParams.get("start") || "1", 10);
+  const end = parseInt(searchParams.get("end") || "50", 10);
+  
+  const [localStart, setLocalStart] = useState(start);
+  const [localEnd, setLocalEnd] = useState(end);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const TOTAL = 90; // Exactly 30 rows in 3 columns for 2 printed pages
+
+  useEffect(() => {
+    generateQuestions();
+  }, [start, end]);
+
+  const generateQuestions = () => {
+    const randomInt = (min: number, max: number) => {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    const newQuestions: Question[] = [];
+    for (let i = 0; i < TOTAL; i++) {
+      let x = randomInt(start, end);
+      let y = randomInt(start, end);
+      
+      // Force some to be equal occasionally
+      if (Math.random() > 0.85) {
+        y = x;
+      }
+      
+      newQuestions.push({ x, y });
+    }
+    setQuestions(newQuestions);
+  };
+
+  const handleApply = () => {
+    if (localStart !== start || localEnd !== end) {
+      setSearchParams({ start: localStart.toString(), end: localEnd.toString() });
+    } else {
+      generateQuestions();
+    }
+  };
+
+  return (
+    <div className="worksheet-page">
+      <div className="no-print worksheet-controls" style={{ display: 'flex', justifyContent: 'center', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', background: '#fff', padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+          <label style={{ fontWeight: 600, fontSize: '14px' }}>From:</label>
+          <input type="number" value={localStart} onChange={(e) => setLocalStart(parseInt(e.target.value) || 1)} style={{ width: '60px', padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc' }} />
+          <label style={{ fontWeight: 600, fontSize: '14px', marginLeft: '10px' }}>To:</label>
+          <input type="number" value={localEnd} onChange={(e) => setLocalEnd(parseInt(e.target.value) || 50)} style={{ width: '60px', padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc' }} />
+        </div>
+        <button className="print-btn" style={{ background: "#64748b" }} onClick={handleApply}>
+          Generate
+        </button>
+        <button className="print-btn" onClick={() => window.print()}>
+          Print
+        </button>
+      </div>
+      
+      <h1>Compare Numbers ({start}–{end})</h1>
+      <p className="instructions">Write {'>'}, {'<'} or {'='} in the circle.</p>
+      
+      <div className="worksheet-grid">
+        {questions.map((q, index) => (
+          <div key={index} className="question-col-3">
+            <div className="question-row" style={{ gap: '10px' }}>
+              <span className="worksheet-box small standalone">{q.x}</span>
+              <span className="worksheet-box small circle" style={{ width: '40px' }}>&nbsp;</span>
+              <span className="worksheet-box small standalone">{q.y}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

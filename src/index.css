@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg-color: #f8fafc;
+  --text-color: #0f172a;
+  --card-bg: #ffffff;
+  --border-color: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   WORKSHEET PRINT STYLES 
+   (Ported from CommonStyle.css)
+========================================= */
+.worksheet-page {
+  max-width: 210mm; /* A4 width approx */
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  min-height: 100vh;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.worksheet-page h1 {
+  text-align: center;
+  font-size: 22px;
+  margin-top: 10px;
+  color: transparent; /* hide text if any */
+}
+
+.worksheet-page p.instructions {
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: black;
+}
+
+.worksheet-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px 10px;
+  padding: 0 20px 40px;
+  box-sizing: border-box;
+}
+
+/* 3 columns */
+.question-col-3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 calc(33% - 10px);
+  box-sizing: border-box;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  font-size: 26px;
+  letter-spacing: 1px;
+}
+
+.question-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.worksheet-box {
+  border: 2px solid #000;
+  border-right: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 38px;
+  text-align: center;
+  box-sizing: border-box;
+  background: white;
+  color: black;
+}
+
+.worksheet-box:last-child {
+  border-right: 2px solid #000;
+}
+
+.worksheet-box.blank {
+  background-color: #fff !important;
+  color: transparent !important;
+}
+
+/* Smaller box for some worksheets */
+.worksheet-box.small {
+  width: 55px;
+  height: 38px;
+  font-size: 22px;
+}
+
+.set-separator {
+  border-top: 2px dotted #888;
+  margin: 10px auto 12px;
+  width: 80%;
+  grid-column: 1 / -1;
+}
+
+.worksheet-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 20px;
+  row-gap: 20px;
+  padding: 0 20px 40px;
+}
+
+.question-col-1 {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+}
+
+/* Print Rules */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  body {
+    margin: 0;
+    background: white;
+  }
+  .worksheet-page {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    min-height: auto;
+  }
+  .worksheet-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px 10px;
+    page-break-inside: auto;
+    padding: 0;
+  }
+  .worksheet-grid-2 {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    page-break-inside: auto;
+    padding: 0;
+  }
+  .question-col-3, .question-col-1 {
+    page-break-inside: avoid;
+    width: 100% !important; /* Ensure grid items take full column width */
+  }
+  .set-separator {
+    page-break-inside: auto;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+.worksheet-box.standalone {
+  border-right: 2px solid #000 !important;
+  border-radius: 8px;
+}
+
+.worksheet-box.circle { 
+  border-right: 2px solid #000 !important;
+  border-radius: 50%; 
+}
