@@ -39,7 +39,7 @@ export default function Layout() {
       <nav className="navbar no-print">
         <div className="nav-container">
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-            <img src="/favicon.svg" alt="Examiner Logo" style={{ width: '28px', height: '28px', display: 'block' }} />
+            <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="Examiner Logo" style={{ width: '28px', height: '28px', display: 'block' }} />
             <span className="nav-brand">Examiner</span>
             {pageName && <span style={{color: '#94a3b8', fontWeight: 400, marginLeft: '4px'}}>/ {pageName}</span>}
           </Link>
